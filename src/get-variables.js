@@ -1,19 +1,21 @@
-import stripComments from 'strip-json-comments';
+// import stripComments from 'strip-json-comments';
+import thematic from 'sass-thematic';
 
 export default function getVariables(content) {
-  const variableRegex = /\$(.+):\s+(.+);?/;
-  const variables = [];
 
-  stripComments(content).split('\n').forEach(line => {
-    const variable = variableRegex.exec(line);
-    if (!variable) return;
+    let options = {
+        data: '{}',
+        // varsFile: '',
+        varsData: content,
+        treeRemoval: true,
+        varsRemoval: true,
+        // template: true,
+    };
 
-    const name = variable[1].trim();
-    const value = variable[2].replace(/!default|!important/g, '').trim();
+    let theme = new thematic({}, options);
 
-    variables.push({ name, value });
-    return;
-  });
+    let variables = theme.vars;
 
-  return variables;
+    return variables;
+
 }
